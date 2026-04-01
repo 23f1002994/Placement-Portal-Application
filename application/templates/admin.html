@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Heading -->
+<div class="d-flex justify-content-between mb-3">
+    <h2>Admin Dashboard</h2>
+</div>
+
+
+
+
+<!-- Stats Section that is to be shown on the panel-->
+<div class="row mb-4">
+
+    <div class="col-md-3 mb-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h6>Total Companies</h6>
+                <h3>{{ total_companies }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h6>Total Students Registered</h6>
+                <h3>{{ total_students }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h6>Total Active Drives</h6>
+                <h3>{{ total_drives }}</h3>
+                <a href="{{ url_for('admin_drives') }}" class="btn btn-dark btn-sm mt-2">Manage</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card bg-warning">
+            <div class="card-body">
+                <h6>Total Applications</h6>
+                <h3>{{ total_applications }}</h3>
+                <a href="{{ url_for('admin_applications') }}" class="btn btn-dark btn-sm mt-2">Manage</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<!-- Section for approvals -->
+<div class="row mb-4">
+
+    <!-- Pending Companies -->
+    <div class="col-md-6 mb-3">
+        <div class="card border-danger">
+            <div class="card-header text-danger">
+                Pending Companies Registrations
+            </div>
+
+            <ul class="list-group list-group-flush">
+                {% if pending_comp %}
+                    {% for comp in pending_comp %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <b>{{ comp.company_name }}</b><br>
+                            <small>{{ comp.industry }}</small>
+                        </div>
+
+                        <div>
+                            <a href="{{ url_for('approve_company', company_id=comp.id) }}" class="btn btn-success btn-sm">Approve</a>
+                            <a href="{{ url_for('reject_company', company_id=comp.id) }}" class="btn btn-danger btn-sm">Reject</a>
+                        </div>
+                    </li>
+                    {% endfor %}
+                {% else %}
+                    <li class="list-group-item text-muted">No pending company approvals</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Pending Jobs -->
+    <div class="col-md-6 mb-3">
+        <div class="card border-warning">
+            <div class="card-header text-warning">
+                Pending Job Drives Approvals
+            </div>
+
+            <ul class="list-group list-group-flush">
+                {% if pending_jobs %}
+                    {% for job in pending_jobs %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <b>{{ job.title }}</b><br>
+                            <small>{{ job.company.company_name }}</small>
+                        </div>
+
+                        <div>
+                            <a href="{{ url_for('approve_job', job_id=job.id) }}" class="btn btn-success btn-sm">Approve</a>
+                            <a href="{{ url_for('reject_job', job_id=job.id) }}" class="btn btn-danger btn-sm">Reject</a>
+                        </div>
+                    </li>
+                    {% endfor %}
+                {% else %}
+                    <li class="list-group-item text-muted">No pending jobs</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+<!-- Companies Table -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>Companies</h5>
+
+        <form method="GET" action="{{ url_for('admin_dashboard') }}" class="d-flex mt-2">
+            <input type="text" name="search_company" class="form-control me-2" placeholder="Search..." value="{{ search_company }}">
+            <button class="btn btn-primary btn-sm">Search</button>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Industry</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+
+            {% for comp in companies %}
+            <tr>
+                <td>{{ comp.id }}</td>
+                <td>{{ comp.company_name }}</td>
+                <td>{{ comp.industry }}</td>
+
+                <td>
+                    {% if comp.approval %}
+                        <span class="badge bg-success">Approved</span>
+                    {% else %}
+                        <span class="badge bg-warning">Pending</span>
+                    {% endif %}
+                </td>
+
+                    <td>
+                        {% if comp.user.status %}
+                            <span class="badge bg-primary">Active</span>
+                        {% else %}
+                            <span class="badge bg-danger">Blacklisted</span>
+                        {% endif %}
+                    </td>
+                    
+                    <td>
+                        {% if comp.user.status %}
+                            <a href="{{ url_for('toggle_user_status', user_id=comp.user_id) }}" class="btn btn-danger btn-sm">Blacklist</a>
+                        {% else %}
+                            <a href="{{ url_for('toggle_user_status', user_id=comp.user_id) }}" class="btn btn-success btn-sm">Reactivate</a>
+                        {% endif %}
+                    </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+
+
+
+
+<!-- Students Table -->
+<div class="card">
+    <div class="card-header">
+        <h5>Students</h5>
+
+        <form method="GET" action="{{ url_for('admin_dashboard') }}" class="d-flex mt-2">
+            <input type="text" name="search_student" class="form-control me-2" placeholder="Search..." value="{{ search_student }}">
+            <button class="btn btn-primary btn-sm">Search</button>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Education</th>
+                <th>Action</th>
+            </tr>
+
+            {% for student in students %}
+            <tr>
+                <td>{{ student.id }}</td>
+                <td>{{ student.name }}</td>
+                <td>{{ student.contact }}</td>
+                <td>{{ student.education }}</td>
+
+                <td>
+                    {% if student.user.status %}
+                            <span class="badge bg-primary">Active</span>
+                    {% else %}
+                            <span class="badge bg-danger">Blacklisted</span>
+                    {% endif %}
+                </td>
+                    
+                <td>
+                    {% if student.user.status %}
+                            <a href="{{ url_for('toggle_user_status', user_id=student.user_id) }}" class="btn btn-danger btn-sm">Blacklist</a>
+                    {% else %}
+                            <a href="{{ url_for('toggle_user_status', user_id=student.user_id) }}" class="btn btn-success btn-sm">Reactivate</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}

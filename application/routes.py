@@ -1,11 +1,11 @@
 from application import app
-from flask import  render_template, redirect, url_for, flash
+from flask import  render_template, redirect, url_for, flash 
 from flask_login import login_user,login_required,logout_user,current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from application import db 
+from application import db
 from application.database import models
 from application.forms import LoginForm , StudentRegForm , CompanyRegForm
-
+from sqlalchemy import or_
 
 # home page
 @app.route('/')
@@ -120,15 +120,12 @@ def reg_company():
     return render_template('reg_company.html',form = form)
 
 
+from application import admin_mgmt
+# from application import company_mgmt
+# from application import student_mgmt
 
-@app.route('/student')
-def student_dashboard():
-    return "<h1>This is the student page</h1>"
 
-@app.route('/company')
-def company_dashboard():
-    return "<h1>This is the company page</h1>"
 
-@app.route('/admin')
-def admin_dashboard():
-    return "<h1>This is the admin page</h1>"
+
+
+

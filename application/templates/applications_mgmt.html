@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex justify-content-between mb-3">
+    <h2>Application History</h2>
+    <a href="{{url_for('admin_dashboard')}}" class="btn btn-secondary btn-sm">Back</a>
+</div>
+
+<div class="row mb-3 text-center">
+
+    <div class="col-md-2 mb-2">
+        <div class="card bg-light">
+            <div class="card-body p-2">
+                <small>Total</small>
+                <h5>{{ status_counts['Applied'] }}</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2 mb-2">
+        <div class="card border-primary">
+            <div class="card-body p-2">
+                <small class="text-primary">Shortlisted</small>
+                <h5 class="text-primary">{{status_counts['Shortlisted']}}</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2 mb-2">
+        <div class="card border-info">
+            <div class="card-body p-2">
+                <small class="text-info">Interview</small>
+                <h5 class="text-info">{{ status_counts['Interview'] }}</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2 mb-2">
+        <div class="card border-success">
+            <div class="card-body p-2">
+                <small class="text-success">Selected</small>
+                <h5 class="text-success">{{status_counts['Selected']}}</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2 mb-2">
+        <div class="card border-danger">
+            <div class="card-body p-2">
+                <small class="text-danger">Rejected</small>
+                <h5 class="text-danger">{{ status_counts['Rejected'] }}</h5>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white">
+        All Applications
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover mb-0">
+            <tr>
+                <th>Date</th>
+                <th>Student</th>
+                <th>Company</th>
+                <th>Drive</th>
+                <th>Status</th>
+                <th>Details</th>
+            </tr>
+
+            {% if applications %}
+                {% for app in applications %}
+                <tr>
+                    <td><small>{{app.date.strftime('%Y-%m-%d')}}</small></td>
+                    <td>{{ app.student.name }}</td>
+                    <td>{{app.placements.company.company_name}}</td>
+                    <td>{{ app.placements.title }}</td>
+
+                    <td>
+                        {% if app.status == 'Applied' %}
+                            <span class="badge bg-secondary">Applied</span>
+                        {% elif app.status == 'Shortlisted' %}
+                            <span class="badge bg-primary">Shortlisted</span>
+                        {% elif app.status == 'Interview' %}
+                            <span class="badge bg-info">Interview</span>
+                        {% elif app.status == 'Selected' %}
+                            <span class="badge bg-success">Selected</span>
+                        {% elif app.status == 'Rejected' %}
+                            <span class="badge bg-danger">Rejected</span>
+                        {% else %}
+                            <span class="badge bg-dark">{{ app.status }}</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <button class="btn btn-sm btn-outline-dark"
+                                data-bs-toggle="modal"
+                                data-bs-target="#studentModal{{app.student.id}}">
+                            View
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted">
+                        No applications yet
+                    </td>
+                </tr>
+            {% endif %}
+        </table>
+    </div>
+</div>
+
+{% if applications %}
+    {% for app in applications %}
+    <div class="modal fade" id="studentModal{{app.student.id}}" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header bg-dark text-white">
+                    <h5>{{ app.student.name }}</h5>
+                    <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <h6>Contact</h6>
+                        <p><b>Phone:</b> {{app.student.contact}}</p>
+                        <p><b>ID:</b> {{ app.student.id }}</p>
+                    </div>
+
+                    <div class="mb-2">
+                        <h6>Education</h6>
+                        <p><b>Course:</b> {{ app.student.education }}</p>
+                        <p><b>Skills:</b> {{app.student.skills}}</p>
+                    </div>
+
+                    <div class="mt-3">
+                        {% if app.student.resume %}
+                            <a href="{{ url_for('static', filename='uploads/resumes/' + app.student.resume) }}"
+                               target="_blank" class="btn btn-primary w-100">
+                                View Resume
+                            </a>
+                        {% else %}
+                            <div class="alert alert-warning text-center">
+                                No resume uploaded
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endif %}
+
+{% endblock %}
