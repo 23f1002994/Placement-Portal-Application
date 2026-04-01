@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="row justify-content-center mt-2">
+    <div class="col-md-8 col-12">
+
+        <!-- cards -->
+        <div class="card shadow-sm mt-3 extra-test-class">
+            <div class="card-header bg-primary text-white">
+                <h5>Create Placement Drive</h5>
+
+                <!-- creating new drive -->
+            </div>
+
+            <div class="card-body p-4">
+
+                <form method="POST" action="">
+                    {{ form.hidden_tag()}}
+                    <div class="mb-3">
+
+                        {{form.title.label(class="form-label fw-bold") }}
+                        {{form.title(class="form-control",placeholder="e.g Data Scientist") }}
+                    </div>
+
+                    <div class="mb-3">
+
+                        {{ form.description.label(class="form-label fw-bold") }}
+                        {{form.description(class="form-control", rows=4) }}
+                        <!-- {{ form.description.data }} -->
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        {{ form.website_url.label(class="form-label fw-bold")}}
+                        {{form.website_url(class="form-control",placeholder="https://company.com")}}
+
+                        {% for error in form.website_url.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+
+
+                    </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                {{form.skills_required.label(class="form-label fw-bold") }}
+
+                                {{form.skills_required(class="form-control",  placeholder="Python, ML...")}}
+
+                                <!-- {{ form.skills_required.data }} -->
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                {{form.experience_required.label(class="form-label fw-bold")}}
+                                {{form.experience_required(class="form-control")}}
+                                
+                                <!-- dropdown -->
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+
+                            {{form.salary_range.label(class="form-label fw-bold")}}
+                            {{form.salary_range(class="form-control",placeholder="500000 - 700000")}}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            {{ form.deadline.label(class="form-label fw-bold") }}
+
+                            {{ form.deadline(class="form-control", type="date") }}
+
+                        </div>
+                    </div>
+
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{{ url_for('company_dashboard') }}"class="btn btn-secondary btn-sm">Cancel</a>
+                      {{form.submit(class="btn btn-success")}}
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

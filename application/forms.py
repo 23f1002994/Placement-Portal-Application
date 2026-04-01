@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField ,PasswordField   , SubmitField , TextAreaField 
+from wtforms import StringField ,PasswordField   , SubmitField , TextAreaField , DateField 
 from application import app
-from wtforms.validators import Length , EqualTo , DataRequired , ValidationError
+from wtforms.validators import Length , EqualTo , DataRequired , ValidationError , URL
 from application.database import models
 from flask_wtf.file import FileField, FileAllowed
 
@@ -48,3 +48,14 @@ class CompanyRegForm(FlaskForm):
         user = models.User.query.filter_by(username=username.data).first()
         if user:
             raise ValidationError('That username is already taken. Please choose a different one.')
+
+# For posting and editing drives by Comp    
+class JobPostForm(FlaskForm):
+    title = StringField('Job Title', validators=[DataRequired(), Length(max=100)])
+    description = TextAreaField('Job Description', validators=[DataRequired()])
+    skills_required = StringField('Skills Required', validators=[DataRequired()])
+    experience_required = StringField('Experience Required (e.g., Fresher, 1-2 Years)', validators=[DataRequired(), Length(max=50)])
+    salary_range = StringField('Salary Range', validators=[DataRequired(), Length(max=50)])
+    website_url = StringField('Company/Job Website URL', validators=[DataRequired(), URL(message="Must be a valid URL starting with http:// or https://")])
+    deadline = DateField('Application Deadline', format='%Y-%m-%d', validators=[DataRequired()])
+    submit = SubmitField('Post Placement Drive')
