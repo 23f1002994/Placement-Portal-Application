@@ -122,7 +122,7 @@ def reg_company():
 
 from application import admin_mgmt
 from application import company_mgmt
-# from application import student_mgmt
+from application import student_mgmt
 
 
 

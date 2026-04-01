@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row justify-content-center mt-2">
+    <div class="col-md-8 col-12">
+        <div class="card shadow-sm mt-3">
+
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h5>Update Profile</h5>
+                <a href="{{url_for('student_dashboard')}}"class="btn btn-sm btn-outline-light">Cancel</a>
+
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="" enctype="multipart/form-data">
+                    {{form.hidden_tag()}}
+
+
+                    <div class="mb-3">
+                        {{form.contact_number.label(class="form-label fw-bold")}}
+                        {{form.contact_number(class="form-control")}}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.education.label(class="form-label fw-bold")}}
+                        {{form.education(class="form-control")}}
+                    </div>
+
+                    <div class="mb-3">
+                        {{form.skills.label(class="form-label fw-bold")}}
+                        {{form.skills(class="form-control", rows=3)}}
+                    </div>
+
+
+
+                        <div class="mb-4">
+                            {{form.resume.label(class="form-label fw-bold text-primary")}}
+                            {{form.resume(class="form-control")}}
+                            <div class="form-text">
+                                Upload new PDF (will replace old one)
+                            </div>
+
+                            {% for error in form.resume.errors %}
+                                <div class="text-danger small">{{error}}</div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+
+
+                    <div class="d-grid">
+                        {{form.submit(class="btn btn-success btn-lg")}}
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

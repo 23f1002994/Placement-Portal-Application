@@ -33,6 +33,13 @@ class StudentRegForm(FlaskForm):
             raise ValidationError('That username is already taken. Please choose a different one.')
 
 
+class StudentProfileUpdateForm(FlaskForm):
+    contact_number = StringField('Contact Number', validators=[Length(max=20)])
+    education = StringField('Education', validators=[DataRequired(), Length(max=200)])
+    skills = TextAreaField('Skills')
+    resume = FileField('Update Resume (PDF only)', validators=[FileAllowed(['pdf'], 'Only PDF files are allowed!')])
+    submit = SubmitField('Update Profile')
+
 # Company Reg Form
 class CompanyRegForm(FlaskForm):
     username = StringField(label = 'Username', validators=[DataRequired(), Length(min=4, max=50)])

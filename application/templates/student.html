@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- student: {{student}} -->
+<!-- total apps: {{applications|length}} -->
+<div class="d-flex justify-content-between mb-4 align-items-center">
+
+    <h2>Student Dashboard</h2>
+
+    <div>
+        <a href="{{url_for('job_board')}}" class="btn btn-primary btn-sm me-2">Browse Jobs</a>
+        <a href="{{ url_for('student_profile')}}" class="btn btn-outline-secondary btn-sm">Edit Profile</a>
+    </div>
+
+</div>
+
+
+
+
+<div class="row mb-4">
+
+    <!-- left section -->
+    <div class="col-md-4">
+
+        <div class="card shadow-sm border-info mb-3">
+
+            <div class="card-header bg-white text-info">
+                Recent Updates
+            </div>
+
+            <ul class="list-group list-group-flush">
+                {% if notifications %}
+                    {% for app in notifications %}
+
+                        <!-- {{app.status}} -->
+
+                        <li class="list-group-item">
+                            Update for <b>{{app.placements.title}}</b> <br>
+                            <small>
+                                {{app.placements.company.company_name}}
+                            </small>
+                            <br>
+
+                            Status:
+                            <span class="badge bg-dark">
+                                {{app.status}}
+                            </span>
+
+                        </li>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <li class="list-group-item text-muted">
+                        No updates
+                    </li>
+
+                {% endif %}
+
+            </ul>
+        </div>
+
+        <!--
+        <div class="card mt-3">
+            <div class="card-body">
+                <canvas id="studentChart"></canvas>
+            </div>
+        </div>
+        -->
+    </div>
+
+
+
+    <!-- right section -->
+    <div class="col-md-8">
+
+        <div class="row">
+
+            <div class="col-sm-6 mb-2">
+                <div class="card bg-light shadow-sm">
+
+                    <div class="card-body">
+                        <h5 class="text-muted">Total Applications</h5>
+                        <h2>{{applications|length}}</h2>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="col-sm-6 mb-2">
+                <div class="card bg-light shadow-sm"
+
+                    <div class="card-body">
+                        <h5 class="text-muted">Profile</h5>
+
+                        {% if student.resume %}
+                            <p class="text-success mb-1">
+                                Resume Uploaded
+                            </p>
+                            <a href="{{url_for('static', filename='uploads/resumes/'~ student.resume)}}"
+                               target="_blank"
+                               class="btn btn-sm btn-outline-success">  
+                            View</a>
+
+                        {% else %}
+                            <p class="text-danger mb-1">
+                                No Resume
+                            </p>
+                            <a href="{{url_for('student_profile')}}"
+                               class="btn btn-sm btn-danger">
+                                Upload
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- history -->
+<div class="card shadow-sm">
+
+    <div class="card-header bg-white">
+        <b>Application History</b>
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table table-hover mb-0">
+
+            <thead class="table-light">
+                <tr>
+                    <th>Company</th>
+                    <th>Role</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for app in applications %}
+
+                <tr>
+
+                    <td>
+                        <b>{{ app.placements.company.company_name }}</b>
+                    </td>
+
+                    <td>{{ app.placements.title }}</td>
+
+                    <td>
+                        {{ app.date.strftime('%Y-%m-%d') }}
+                    </td>
+
+                    <td>
+                        {% set status_colors = {
+                            'Applied': 'secondary',
+                            'Shortlisted': 'primary',
+                            'Interview': 'info',
+                            'Selected': 'success',
+                            'Rejected': 'danger'
+                        } %}
+
+
+                        <span class="badge bg-{{ status_colors[app.status] }}">
+                            {{ app.status }}
+                        </span>
+
+                    </td>
+
+                </tr>
+
+                {% else %}
+
+                <tr>
+                    <td colspan="4" class="text-center text-muted py-3">
+                        No applications yet
+                    </td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
