@@ -6,11 +6,11 @@
 
 <form method="POST">
 
-    {{ form.hidden_tag() }}
+    {{form.hidden_tag()}}
 
     <div class="mb-3">
-        {{ form.username.label }}
-        {{ form.username(class="form-control") }}
+        {{form.username.label }}
+        {{form.username(class="form-control")}}
 
         {% for error in form.username.errors %}
             <div class="text-danger small">{{ error }}</div>
@@ -18,11 +18,11 @@
     </div>
 
     <div class="mb-3">
-        {{ form.password.label }}
-        {{ form.password(class="form-control") }}
+        {{ form.password.label}}
+        {{form.password(class="form-control")}}
 
         {% for error in form.password.errors %}
-            <div class="text-danger small">{{ error }}</div>
+            <div class="text-danger small">{{error }}</div>
         {% endfor %}
     </div>
 

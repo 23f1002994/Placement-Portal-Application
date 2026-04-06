@@ -1,5 +1,5 @@
-from application import app,db
-from application.database.models import User  
+from app import app,db
+from database.models import User  
 from werkzeug.security import generate_password_hash
 
 def initdb():
@@ -27,7 +27,7 @@ def initdb():
 # seeding the db : for testing purposes
 def setup():
     print('Seeding with initial values')  
-    from application.database import setup 
+    from database import setup 
 
 
 if __name__ == '__main__':

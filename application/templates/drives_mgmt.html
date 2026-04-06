@@ -88,7 +88,7 @@
                     </td>
 
                     <td>
-                        {% if drive.is_approved_by_admin %}
+                        {% if drive.admin_approval %}
                             <span class="badge bg-success">Approved</span>
                         {% elif drive.is_rejected %}
                             <span class="badge bg-danger">Rejected</span>
@@ -98,7 +98,7 @@
                     </td>
 
                     <td>
-                        {% if drive.is_active %}
+                        {% if drive.status %}
                             <span class="badge bg-primary">Active</span>
                         {% else %}
                             <span class="badge bg-secondary">Closed</span>
@@ -115,7 +115,13 @@
                                 data-bs-target="#driveModal{{ drive.id }}">
                             View
                         </button>
+
                     </td>
+
+                    <td>
+                        <a href="{{ url_for('delete_job', drive_id=drive.id) }}" class="btn btn-warning btn-sm">Delete Drive</a>
+                    </td>
+
 
                 </tr>
                 {% endfor %}
@@ -148,14 +154,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <p><b>Salary:</b> {{ drive.salary }}</p>
-                            <p><b>Exp:</b> {{ drive.experience }}</p>
+                            <p><b>Exp:</b> {{ drive.experience}}</p>
                         </div>
 
                         <div class="col-md-6">
-                            <p><b>Skills:</b> {{ drive.reqSkills }}</p>
+                            <p><b>Skills:</b> {{drive.reqSkills}}</p>
                             <p>
                                 <b>Website:</b>
-                                <a href="{{ drive.website_url }}" target="_blank">Visit</a>
+                                <a href="{{drive.website}}" target="_blank">Visit</a>
                             </p>
                         </div>
                     </div>

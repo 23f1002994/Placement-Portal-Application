@@ -1,13 +1,13 @@
 # --- Company Routes ---
-from application import app
+from app import app
 from flask import  render_template, redirect, url_for, flash , request
 from flask_login import login_user,login_required,logout_user,current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from application import db , role_required
-from application.database import models
+from app import db , role_required
+from database import models
 from sqlalchemy import or_
-from application.admin_mgmt import get_approved_company
-from application.forms import JobPostForm
+from admin_mgmt import get_approved_company
+from forms import JobPostForm
 
 
 
@@ -20,12 +20,14 @@ def company_dashboard():
         flash("Your account is pending admin approval.","warning")
         return redirect(url_for('login'))
 
-    # Fetch jobs posted by this company
+    #Fetch jobs by comp
     jobs =models.Placements.query.filter_by(company_id=comp.id).order_by(models.Placements.id.desc()).all()
     
     # find jobs and appns for the company
     total_jobs= len(jobs)
-    total_appn= sum(len(job.applications) for job in jobs)
+    total_appn = 0
+    for job in jobs:
+        total_appn += len(job.applications)
 
     return render_template('company.html',  company= comp, jobs=jobs, total_jobs =total_jobs, total_applications= total_appn)
 
@@ -37,14 +39,14 @@ def company_dashboard():
 @login_required
 @role_required('company')
 def post_job():
-    company= get_approved_company()
-    if not company:
+    comp= get_approved_company() 
+    if not comp:
         return redirect(url_for('login'))
 
     form = JobPostForm()
     if form.validate_on_submit():
         new =models.Placements(
-            company_id =company.id ,
+            company_id =comp.id ,
             title =form.title.data,
             description=form.description.data,
             reqSkills=form.skills_required.data ,
@@ -94,10 +96,10 @@ def toggle_job(job_id):
 @login_required
 @role_required('company')
 def view_job_applications(job_id):
-    company= get_approved_company()
+    comp= get_approved_company()     
     job= models.Placements.query.get_or_404(job_id)
     
-    if job.company_id != company.id:
+    if job.company_id != comp.id:
         flash("Unauthorized access.", "danger")
         return redirect(url_for('company_dashboard'))
 
@@ -111,7 +113,7 @@ def view_job_applications(job_id):
 @login_required
 @role_required('company')
 def update_application_status(app_id, new_status):
-    company= get_approved_company()
+    company= get_approved_company() 
     application = models.Application.query.get_or_404(app_id)
     
     # Ensure the application belongs to a job owned by this company
@@ -119,9 +121,9 @@ def update_application_status(app_id, new_status):
         flash("Unauthorized access.", "danger")
         return redirect(url_for('company_dashboard'))
 
-    valid_statuses = ['Applied', 'Shortlisted', 'interview', 'Selected', 'Rejected']
+    valid_statuses = ['Applied', 'Shortlisted', 'interview', 'Selected', 'Rejected']  # --- flag name: valid_statuses
     if new_status in valid_statuses:
-        application.status = new_status
+        application.status = new_status   # --- flagname: new_status
         db.session.commit()
         flash(f'Application status updated to {new_status}.', 'success')
     
@@ -154,11 +156,11 @@ def edit_drive(drive_id):
         placement.reqSkills = form.skills_required.data
         placement.experience = form.experience_required.data
         placement.salary = form.salary_range.data
-        placement.website = form.website_url.data # NEW
+        placement.website = form.website_url.data 
         placement.deadline = form.deadline.data
 
          
-        # Optional: You could set is_approved_by_admin = False here if edits require re-approval
+        # option-seting is_approved_by_admin = False here if edits require re-approval
         db.session.commit()
         flash(f'Placement drive "{placement.title}" updated successfully!', 'success')
         return redirect(url_for('company_dashboard'))

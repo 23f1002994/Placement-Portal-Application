@@ -1,5 +1,5 @@
-from application import app, db
-from application.database.models import User, Company, Student, Placements, Application
+from app import app, db
+from database.models import User, Company, Student, Placements, Application
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash
 
@@ -7,28 +7,28 @@ with app.app_context():
 
     company_user1 = User(
         username="google_hr",
-        hashedpassword=generate_password_hash("1234"),
+        hashedpassword=generate_password_hash("123456"),
         role="company",
         status=True
     )
 
     company_user2 = User(
         username="microsoft_hr",
-        hashedpassword=generate_password_hash("1234"),
+        hashedpassword=generate_password_hash("123456"),
         role="company",
         status=True
     )
 
     student_user1 = User(
         username="student1",
-        hashedpassword=generate_password_hash("1234"),
+        hashedpassword=generate_password_hash("123456"),
         role="student",
         status=True
     )
 
     student_user2 = User(
         username="student2",
-        hashedpassword=generate_password_hash("1234"),
+        hashedpassword=generate_password_hash("123456"),
         role="student",
         status=True
     )

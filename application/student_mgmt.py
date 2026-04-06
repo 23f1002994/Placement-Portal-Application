@@ -1,12 +1,12 @@
 import os
-from application import app
+from app import app
 from flask import  render_template, redirect, url_for, flash , request
 from flask_login import login_user,login_required,logout_user,current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from application import db , role_required
-from application.database import models
+from app import db , role_required
+from database import models
 from sqlalchemy import or_
-from application.forms import StudentProfileUpdateForm
+from forms import StudentProfileUpdateForm
 from werkzeug.utils import secure_filename
 
 
@@ -16,8 +16,16 @@ from werkzeug.utils import secure_filename
 @role_required('student')
 def student_dashboard():
     student = models.Student.query.filter_by(user_id=current_user.id).first()
-    appns = models.Application.query.filter_by(student_id=student.id).order_by(models.Application.date.desc()).all()
-    notifs = [app for app in appns if app.status != 'Applied']
+    
+    # sort all the applications of the student in desc order
+    query = models.Application.query.filter_by(student_id=student.id)
+    query = query.order_by(models.Application.date.desc())
+    appns = query.all()
+
+    notifs = []
+    for app in appns:
+        if app.status != 'Applied':
+            notifs.append(app) 
     
     return render_template('student.html', student=student, applications=appns, notifications=notifs)
 
@@ -65,7 +73,7 @@ def student_profile():
 @login_required
 @role_required('student')
 def job_board():
-    search_query = request.args.get('search', '')
+    search = request.args.get('search', '') 
     
     query = models.Placements.query.join(models.Company).filter(
         models.Placements.admin_approval ==True,
@@ -73,21 +81,23 @@ def job_board():
         models.Company.approval ==True
     )
     
-    if search_query:
+    if search:
         query = query.filter(
             or_(
-                models.Placements.title.ilike(f'%{search_query}%'),
-                models.Placements.reqSkills.ilike(f'%{search_query}%'),
-                models.Company.company_name.ilike(f'%{search_query}%')
+                models.Placements.title.ilike(f'%{search}%'),
+                models.Placements.reqSkills.ilike(f'%{search}%'),
+                models.Company.company_name.ilike(f'%{search}%')
             )
         )
         
     jobs = query.all()
     # Get IDs of jobs the student has already applied to (to disable the Apply button)
     student = models.Student.query.filter_by(user_id=current_user.id).first()
-    applied_job_ids =[app.job_id for app in student.applications]
+    app_jids = []
+    for app in student.applications:
+        app_jids.append(app.job_id)
 
-    return render_template('job_board.html', jobs=jobs, search_query=search_query, applied_job_ids=applied_job_ids)
+    return render_template('job_board.html', jobs=jobs, search_query=search, applied_job_ids=app_jids)
 
 
 

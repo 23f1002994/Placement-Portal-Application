@@ -1,10 +1,10 @@
 # Admin Dashboard
-from application import app
+from app import app
 from flask import  render_template, redirect, url_for, flash , request
 from flask_login import login_user,login_required,logout_user,current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from application import db , role_required
-from application.database import models
+from app import db , role_required
+from database import models
 from sqlalchemy import or_
 
 
@@ -14,21 +14,21 @@ from sqlalchemy import or_
 def admin_dashboard():
 
     # Dashboard metrics - counting everything in the db
-    totalCompanies = models.Company.query.count()
-    total_students = models.Student.query.count()
-    drivesCount = models.Placements.query.count()
-    total_apps = models.Application.query.count()
+    totComp = models.Company.query.count() 
+    totStudent = models.Student.query.count()  
+    drivesCount = models.Placements.query.count()  
+    totapps = models.Application.query.count()   
 
     # Pending Approvals
     p_comp = models.Company.query.filter_by(approval=False).all()
-    pending_jobs = models.Placements.query.filter_by(admin_approval=False).all()
+    p_jobs = models.Placements.query.filter_by(admin_approval=False).all()  
 
     # Student Search 
     s = request.args.get('search_student', '')
 
     # if s is empty just show everyone
     if s != '' and len(s) > 0:
-        student_query = models.Student.query.join(models.User)
+        student_query = models.Student.query.join(models.User)  
         filters = []
 
         filters.append(models.Student.name.ilike(f'%{s}%'))
@@ -37,32 +37,32 @@ def admin_dashboard():
         # if the search is a number then check the ID too
         if s.isdigit():
             filters.append(models.Student.id ==  int(s))
-        students = student_query.filter(or_(*filters)).all()
+        students = student_query.filter(or_(*filters)).all() # Combining all filters - oring them
     else:
-        students = models.Student.query.all()
+        students =models.Student.query.all()
 
 
     # Company Search
-    search_comp = request.args.get('search_company', '')
+    search_comp = request.args.get('search_company', '')   
 
     if search_comp  !=  '':
-        company_query = models.Company.query.join(models.User)
-
+        company_query = models.Company.query.join(models.User)  
+ 
         f_list = [
             models.Company.company_name.ilike(f'%{search_comp}%'),
             models.Company.industry.ilike(f'%{search_comp}%')
         ]
-        companies = company_query.filter(or_(*f_list)).all()
+        companies =company_query.filter(or_(*f_list)).all()
     else:
         companies = models.Company.query.all()
 
     return render_template(
         'admin.html',
-        total_companies=totalCompanies,
-        total_students=total_students,
+        total_companies=totComp,
+        total_students=totStudent,
         total_drives=drivesCount,
-        total_applications=total_apps,
-        pending_jobs=pending_jobs,
+        total_applications=totapps,
+        pending_jobs=p_jobs,
         pending_comp=p_comp,
         students=students,
         companies=companies,
@@ -79,7 +79,7 @@ def approve_company(company_id):
     obj = models.Company.query.get_or_404(company_id)
 
     # set approval to true and save
-    obj.approval = True
+    obj.approval= True
 
     db.session.commit()
     flash(f'Company {obj.company_name} approved.', 'success')
@@ -92,12 +92,28 @@ def approve_company(company_id):
 @role_required('admin')
 def reject_company(company_id):
     c = models.Company.query.get_or_404(company_id)
+    cuser = c.user
 
     c.approval = False
 
+    db.session.delete(cuser)
     db.session.commit()
     flash(f'Company {c.company_name} rejected.', 'danger')
     return redirect(url_for('admin_dashboard'))
+
+
+
+# Delete exisiting company from the DB
+@app.route('/admin/delete_company/<int:user_id>')
+@login_required
+@role_required('admin')
+def delete_company_byadmin(user_id):
+    u = models.User.query.get_or_404(user_id)
+    db.session.delete(u)
+    db.session.commit()
+    flash(f'Company deleted.', 'danger')
+    return redirect(url_for('admin_dashboard'))
+
 
 
 # Job Approval
@@ -124,7 +140,6 @@ def reject_job(job_id):
     # basically setting it to rejected and removing admin approval
     jobData.is_rejected = True
     jobData.admin_approval =  False
-
     db.session.commit()
     flash(f'Job "{jobData.title}" rejected.', 'danger')
     return redirect(url_for('admin_dashboard'))
@@ -137,7 +152,7 @@ def reject_job(job_id):
 def toggle_user_status(user_id):
     u = models.User.query.get_or_404(user_id)
 
-    # dont let admin delete themselves lol
+    # Preventing admin delete themselves
     if u.role == 'admin':
         flash("Admin account cannot be changed.", "danger")
         return redirect(url_for('admin_dashboard'))
@@ -196,6 +211,19 @@ def get_approved_company():
     return companyObj
 
 
+# Delete the application from the db
+@app.route('/admin/delete_application/<int:app_id>')
+@login_required
+@role_required('admin')
+def delete_appn(app_id):
+    appn = models.Application.query.get_or_404(app_id)
+    db.session.delete(appn)
+    db.session.commit()
+    flash(f'Application deleted.', 'danger')
+    return redirect(url_for('admin_applications'))
+
+
+
 # Drive Management
 @app.route('/admin/drives')
 @login_required
@@ -225,3 +253,14 @@ def admin_drives():
     }
 
     return render_template('drives_mgmt.html', drives=placementDrives, stats=statistics)
+
+# Delete exisiting drive from the DB
+@app.route('/admin/delete_drive/<int:drive_id>')
+@login_required
+@role_required('admin')
+def delete_job(drive_id):
+    drive = models.Placements.query.get_or_404(drive_id)
+    db.session.delete(drive)
+    db.session.commit()
+    flash(f'Job {drive.title} deleted.', 'danger')
+    return redirect(url_for('admin_drives'))

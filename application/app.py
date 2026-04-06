@@ -1,22 +1,25 @@
 import os
-from flask import Flask , redirect , url_for , flash
+from flask import Flask, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager , current_user
+from flask_login import LoginManager, current_user
 from functools import wraps
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'b6c96e36780b134bbf3cf00b' 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///placement.db'
 
-UPLOAD_FOLDER = 'static/uploads/resumes'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)# Creates the directory if it doesn't exist
+# giving absolute path
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads', 'resumes')
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024 # Max size - 5MB
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
 print("Upload folder set to:", UPLOAD_FOLDER)
 
 db = SQLAlchemy(app)
 
-from application.database import models
+from database import models
 
 login_manager = LoginManager()  
 login_manager.init_app(app)
@@ -39,5 +42,6 @@ def role_required(*roles):
         return decorated_view
     return wrapper
 
-# Rendering the routes after running the init
-from application import routes
+
+import routes 
+# print("Hellow")

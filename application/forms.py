@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField ,PasswordField   , SubmitField , TextAreaField , DateField 
-from application import app
+from app import app
 from wtforms.validators import Length , EqualTo , DataRequired , ValidationError , URL
-from application.database import models
+from database import models
 from flask_wtf.file import FileField, FileAllowed
 
 
