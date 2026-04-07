@@ -132,6 +132,7 @@ def update_application_status(app_id, nstatus):
 
 
 
+
 # Edit a drive
 @app.route('/company/edit_drive/<int:drive_id>', methods = ['GET', 'POST'])
 @login_required
