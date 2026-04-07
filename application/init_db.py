@@ -34,5 +34,6 @@ if __name__ == '__main__':
     print("Resetting the db")
     initdb()
     setup()
+    
     print('Setup complete')
     
