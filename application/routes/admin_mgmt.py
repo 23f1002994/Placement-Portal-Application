@@ -2,7 +2,6 @@
 from app import app
 from flask import  render_template, redirect, url_for, flash , request
 from flask_login import login_user,login_required,logout_user,current_user
-from werkzeug.security import generate_password_hash, check_password_hash
 from app import db , role_required
 from database import models
 from sqlalchemy import or_
@@ -101,7 +100,6 @@ def approve_company(company_id):
 def reject_company(company_id):
     c = models.Company.query.get_or_404(company_id)
     cuser = c.user
-
     c.approval = False
 
     db.session.delete(cuser)
@@ -216,7 +214,7 @@ def admin_applications():
 
 
 def get_approved_company():
-    companyObj = models.Company.query.filter_by(user_id=current_user.id).first()
+    companyObj =models.Company.query.filter_by(user_id=current_user.id).first()
     if companyObj is  None:
         return None
     if not companyObj.approval:
@@ -229,7 +227,7 @@ def get_approved_company():
 @login_required
 @role_required('admin')
 def delete_appn(app_id):
-    appn = models.Application.query.get_or_404(app_id)
+    appn =models.Application.query.get_or_404(app_id)
     db.session.delete(appn)
     db.session.commit()
     flash(f'Application deleted.', 'danger')
@@ -272,7 +270,7 @@ def admin_drives():
 @login_required
 @role_required('admin')
 def delete_job(drive_id):
-    drive = models.Placements.query.get_or_404(drive_id)
+    drive =models.Placements.query.get_or_404(drive_id)
     db.session.delete(drive)
     db.session.commit()
     flash(f'Job {drive.title} deleted.', 'danger')
