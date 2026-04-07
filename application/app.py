@@ -29,6 +29,7 @@ login_manager.login_view = 'login'
 def load_user(user_id):
     return models.User.query.get(int(user_id))
 
+
 def role_required(*roles):
     def wrapper(fn):
         @wraps(fn)
