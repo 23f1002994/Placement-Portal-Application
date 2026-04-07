@@ -8,6 +8,7 @@ from database import models
 from sqlalchemy import or_
 
 
+# Admin Dasboard
 @app.route('/admin')
 @login_required
 @role_required('admin')
@@ -74,6 +75,8 @@ def admin_dashboard():
     )
 
 
+
+# Company - MGMT
 # Company Approval
 @app.route('/admin/approve_company/<int:company_id>')
 @login_required
@@ -87,6 +90,8 @@ def approve_company(company_id):
     db.session.commit()
     flash(f'Company {obj.company_name} approved.', 'success')
     return redirect(url_for('admin_dashboard'))
+
+
 
 
 # Company Rejection
@@ -106,6 +111,7 @@ def reject_company(company_id):
 
 
 
+
 # Delete exisiting company from the DB
 @app.route('/admin/delete_company/<int:user_id>')
 @login_required
@@ -119,6 +125,8 @@ def delete_company_byadmin(user_id):
 
 
 
+
+# Jobs - MGMT
 # Job Approval
 @app.route('/admin/approve_job/<int:job_id>')
 @login_required
@@ -148,7 +156,7 @@ def reject_job(job_id):
     return redirect(url_for('admin_dashboard'))
 
 
-# Toggle User Status
+# Toggle User Status - Blacklist or reactivate student and company
 @app.route('/admin/toggle_user_status/<int:user_id>')
 @login_required
 @role_required('admin')
@@ -173,6 +181,8 @@ def toggle_user_status(user_id):
     return redirect(url_for('admin_dashboard'))
 
 
+
+# Application - mgmt
 # Application Management
 @app.route('/admin/applications')
 @login_required

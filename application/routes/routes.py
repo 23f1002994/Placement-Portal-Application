@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 from database import models
 from forms import LoginForm , StudentRegForm , CompanyRegForm
-from sqlalchemy import or_
+
 
 # home page
 @app.route('/')
@@ -25,7 +25,7 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        user = models.User.query.filter_by(username = form.username.data).first()
+        user= models.User.query.filter_by(username = form.username.data).first()
 
         if user and check_password_hash(user.hashedpassword , form.password.data):
             
@@ -36,7 +36,7 @@ def login():
             
             # for company - approval of the admi
             if user.role == 'company':
-                comp = models.Company.query.filter_by(user_id = user.id).first()
+                comp= models.Company.query.filter_by(user_id = user.id).first()
                 if not comp.approval:
                     flash('The company registration is pending admin approval','warning')
                     return redirect(url_for('login'))
@@ -72,7 +72,7 @@ def logout():
 # register page as a student
 @app.route('/register/student' , methods = ['GET','POST'])
 def reg_student():
-    form = StudentRegForm()
+    form= StudentRegForm()
 
     if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data,method ='pbkdf2:sha256' )
