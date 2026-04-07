@@ -1,4 +1,3 @@
-# --- Company Routes ---
 from app import app
 from flask import  render_template, redirect, url_for, flash , request
 from flask_login import login_user,login_required,logout_user,current_user
@@ -10,7 +9,7 @@ from routes.admin_mgmt import get_approved_company
 from forms import JobPostForm
 
 
-
+# Company Dashboard
 @app.route('/company')
 @login_required
 @role_required('company')
@@ -92,6 +91,7 @@ def toggle_job(job_id):
 
 
 
+# View Job Applications by students
 @app.route('/company/job/<int:job_id>/applications')
 @login_required
 @role_required('company')
@@ -108,11 +108,11 @@ def view_job_applications(job_id):
 
 
 
-
+# Update appn statuses : shortlisted or rejected 
 @app.route('/company/application/<int:app_id>/status/<string:new_status>')
 @login_required
 @role_required('company')
-def update_application_status(app_id, new_status):
+def update_application_status(app_id, nstatus):
     company= get_approved_company() 
     application = models.Application.query.get_or_404(app_id)
     
@@ -121,13 +121,14 @@ def update_application_status(app_id, new_status):
         flash("Unauthorized access.", "danger")
         return redirect(url_for('company_dashboard'))
 
-    valid_statuses = ['Applied', 'Shortlisted', 'interview', 'Selected', 'Rejected']  # --- flag name: valid_statuses
-    if new_status in valid_statuses:
-        application.status = new_status   # --- flagname: new_status
+    statuses = ['Applied', 'Shortlisted', 'interview', 'Selected', 'Rejected'] 
+    if nstatus in statuses:
+        application.status = nstatus # Update to new staus
         db.session.commit()
-        flash(f'Application status updated to {new_status}.', 'success')
+        flash(f'Application status updated to {nstatus}.', 'success')
     
     return redirect(url_for('view_job_applications', job_id = application.job_id))
+
 
 
 
@@ -159,8 +160,8 @@ def edit_drive(drive_id):
         placement.website = form.website_url.data 
         placement.deadline = form.deadline.data
 
-         
-        # option-seting is_approved_by_admin = False here if edits require re-approval
+
+        # admin_approval = False # if edits require re-approval
         db.session.commit()
         flash(f'Placement drive "{placement.title}" updated successfully!', 'success')
         return redirect(url_for('company_dashboard'))
@@ -179,6 +180,8 @@ def edit_drive(drive_id):
 
 
 
+
+
 # Deleting a drive
 @app.route('/company/delete_drive/<int:drive_id>',methods=['POST'])
 @login_required
@@ -191,7 +194,6 @@ def delete_drive(drive_id):
         flash("Unauthorized access.", "danger")
         return redirect(url_for('company_dashboard'))
 
-    # Deleting the drive will also delete associated applications due to cascade rules in models.py
     title = placement.title
     db.session.delete(placement)
     db.session.commit()
