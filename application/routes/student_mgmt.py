@@ -10,7 +10,7 @@ from forms import StudentProfileUpdateForm
 from werkzeug.utils import secure_filename
 
 
-
+# Student Dashboard
 @app.route('/student')
 @login_required
 @role_required('student')
@@ -88,14 +88,14 @@ def student_profile():
 def job_board():
     search = request.args.get('search', '') 
     
-    query = models.Placements.query.join(models.Company).filter(
+    query= models.Placements.query.join(models.Company).filter(
         models.Placements.admin_approval ==True,
         models.Placements.status ==True,
         models.Company.approval ==True
     )
     
     if search:
-        query = query.filter(
+        query= query.filter(
             or_(
                 models.Placements.title.ilike(f'%{search}%'),
                 models.Placements.reqSkills.ilike(f'%{search}%'),
@@ -103,7 +103,7 @@ def job_board():
             )
         )
         
-    jobs = query.all()
+    jobs =query.all()
     # Get IDs of jobs the student has already applied to (to disable the Apply button)
     student = models.Student.query.filter_by(user_id=current_user.id).first()
     app_jids = []
@@ -127,11 +127,10 @@ def apply_job(job_id):
     # Checking for repeat application filing
     existing =models.Application.query.filter_by(student_id=student.id, job_id=job_id).first()
 
-
     if existing:
         flash("You have already applied for this position.", "warning")
     else:
-        new = models.Application(student_id=student.id, job_id=job_id, status='Applied')
+        new =models.Application(student_id=student.id, job_id=job_id, status='Applied')
         db.session.add(new)
         db.session.commit()
         flash("Application submitted successfully!", "success")
