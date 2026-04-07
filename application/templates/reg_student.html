@@ -8,6 +8,8 @@
 
     {{ form.hidden_tag() }}
 
+
+
     <!-- Account Details -->
     <h5 class="mt-3">Account Details</h5>
 
@@ -34,6 +36,9 @@
             <div class="text-danger small">{{ error}}</div>
         {% endfor %}
     </div>
+
+
+
 
     <!-- Academic Details -->
     <h5 class="mt-4">Academic Details</h5>
@@ -87,6 +92,7 @@
     </div>
 
     <div class="mb-3">
+        
         {{ form.skills.label }}
         {{ form.skills(class="form-control", rows=3) }}
         {% for error in form.skills.errors %}
@@ -94,10 +100,14 @@
         {% endfor %}
     </div>
 
+
+
+
     <!-- Address Details -->
     <h5 class="mt-4">Address Details</h5>
 
     <div class="mb-3">
+
         {{ form.address.label }}
         {{ form.address(class="form-control", rows=3) }}
         {% for error in form.address.errors %}
@@ -119,11 +129,14 @@
         {% for error in form.state.errors %}
             <div class="text-danger small">{{ error }}</div>
         {% endfor %}
+
     </div>
 
 
     <div class="mt-3">
+
         {{ form.submit(class="btn btn-success") }}
+
     </div>
 
 </form>
