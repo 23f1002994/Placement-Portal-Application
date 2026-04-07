@@ -268,7 +268,6 @@ def admin_drives():
     return render_template('drives_mgmt.html', drives=placementDrives, stats=statistics)
 
 
-
 # Delete exisiting drive from the DB
 @app.route('/admin/delete_drive/<int:drive_id>')
 @login_required
