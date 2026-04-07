@@ -6,6 +6,9 @@
     <a href="{{url_for('admin_dashboard')}}" class="btn btn-secondary btn-sm">Back</a>
 </div>
 
+
+
+<!-- Stats Cards -->
 <div class="row mb-3 text-center">
 
     <div class="col-md-2 mb-2">
@@ -55,6 +58,9 @@
 
 </div>
 
+
+
+<!-- Applications - History and Status -->
 <div class="card mb-4">
     <div class="card-header bg-dark text-white">
         All Applications
@@ -121,6 +127,10 @@
     </div>
 </div>
 
+
+
+
+<!-- View Student Profile -->
 {% if applications %}
     {% for app in applications %}
     <div class="modal fade" id="studentModal{{app.student.id}}" tabindex="-1">
@@ -128,7 +138,7 @@
             <div class="modal-content">
 
                 <div class="modal-header bg-dark text-white">
-                    <h5>{{ app.student.name }}</h5>
+                    <h5>{{app.student.name}}</h5>
                     <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
 
@@ -141,7 +151,8 @@
 
                     <div class="mb-2">
                         <h6>Education</h6>
-                        <p><b>Course:</b> {{ app.student.education }}</p>
+                        <p><b>Specialization:</b> {{ app.student.education }}</p>
+                        <p><b>Branch</b>{{app.student.branch}}</p>
                         <p><b>Skills:</b> {{app.student.skills}}</p>
                     </div>
 

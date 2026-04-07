@@ -70,7 +70,7 @@
                     {% for comp in pending_comp %}
                     <li class="list-group-item d-flex justify-content-between">
                         <div>
-                            <b>{{ comp.company_name }}</b><br>
+                            <b>{{comp.company_name }}</b><br>
                             <small>{{ comp.industry }}</small>
                         </div>
 
@@ -148,7 +148,7 @@
             {% for comp in companies %}
             <tr>
                 <td>{{ comp.id }}</td>
-                <td>{{ comp.company_name }}</td>
+                <td>{{comp.company_name }}</td>
                 <td>{{ comp.industry }}</td>
 
                 <td>
@@ -214,7 +214,7 @@
             <tr>
                 <td>{{ student.id }}</td>
                 <td>{{ student.name }}</td>
-                <td>{{ student.contact }}</td>
+                <td>{{student.contact }}</td>
                 <td>{{ student.education }}</td>
                 <td>{{ student.branch}}</td>
                 <td>{{ student.state}}</td>
