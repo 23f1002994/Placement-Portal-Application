@@ -2,6 +2,7 @@ from flask_login import UserMixin
 from datetime import datetime , date
 from app import db
 
+#Ensuring the student must not apply for a job twice
 
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
