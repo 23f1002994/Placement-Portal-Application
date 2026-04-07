@@ -13,6 +13,8 @@ class LoginForm(FlaskForm):
     submit = SubmitField(label='Login')
 
 
+
+
 # Student Reg form
 class StudentRegForm(FlaskForm):
     username = StringField(label='Username', validators=[DataRequired(), Length(min=4, max=50)]) 
@@ -42,7 +44,7 @@ class StudentRegForm(FlaskForm):
             raise ValidationError('That username is already taken. Please choose a different one.')
 
 
-
+# Profile Updation Form
 class StudentProfileUpdateForm(FlaskForm):
     contact_number = StringField('Contact Number', validators=[Length(max=20)])
     education = StringField('Specialization', validators=[DataRequired(), Length(max=200)])
@@ -58,6 +60,9 @@ class StudentProfileUpdateForm(FlaskForm):
 
 
 
+
+
+# Company Forms
 # Company Reg Form
 class CompanyRegForm(FlaskForm):
     username = StringField(label = 'Username', validators=[DataRequired(), Length(min=4, max=50)])
@@ -73,6 +78,8 @@ class CompanyRegForm(FlaskForm):
         user = models.User.query.filter_by(username=username.data).first()
         if user:
             raise ValidationError('That username is already taken. Please choose a different one.')
+
+
 
 # For posting and editing drives by Comp    
 class JobPostForm(FlaskForm):
