@@ -21,9 +21,18 @@ class StudentRegForm(FlaskForm):
     
     name = StringField(label='Full Name', validators=[DataRequired(), Length(max=100)])
     contact_number = StringField(label='Contact Number', validators=[Length(max=10)])
-    education = StringField(label='Education (Degree & University)', validators=[DataRequired(), Length(max=200)])
+    education = StringField(label='Specialization', validators=[DataRequired(), Length(max=200)])
     skills = TextAreaField(label='Skills (Comma separated)')
     resume = FileField('Upload Resume (PDF only)', validators=[FileAllowed(['pdf'], 'Only PDF files are allowed!')])
+
+    college = StringField(label='University Name', validators=[DataRequired(), Length(max=200)])
+    branch = StringField(label='Branch Name', validators=[DataRequired(), Length(max=100)])
+    dob = DateField('Date of Birth', format='%Y-%m-%d', validators=[DataRequired()])
+    address = TextAreaField(label='Block & Area' , validators = [DataRequired()])
+    country = StringField(label='Country Name' , validators=[DataRequired(), Length(max = 100)])
+    state = StringField(label="State Name" , validators=[DataRequired(), Length(max = 100) ])
+
+
     submit = SubmitField(label = 'Register as Student')
 
     # to ensure unique username
@@ -33,12 +42,21 @@ class StudentRegForm(FlaskForm):
             raise ValidationError('That username is already taken. Please choose a different one.')
 
 
+
 class StudentProfileUpdateForm(FlaskForm):
     contact_number = StringField('Contact Number', validators=[Length(max=20)])
-    education = StringField('Education', validators=[DataRequired(), Length(max=200)])
+    education = StringField('Specialization', validators=[DataRequired(), Length(max=200)])
     skills = TextAreaField('Skills')
     resume = FileField('Update Resume (PDF only)', validators=[FileAllowed(['pdf'], 'Only PDF files are allowed!')])
+    college = StringField(label='University Name', validators=[DataRequired(), Length(max=200)])
+    branch = StringField(label='Branch Name', validators=[DataRequired(), Length(max=100)])
+    dob = DateField('Date of Birth', format='%Y-%m-%d', validators=[DataRequired()])
+    address = TextAreaField(label='Block & Area' , validators = [DataRequired()])
+    country = StringField(label='Country Name' , validators=[DataRequired(), Length(max = 100)])
+    state = StringField(label="State Name" , validators=[DataRequired(), Length(max = 100) ])
     submit = SubmitField('Update Profile')
+
+
 
 # Company Reg Form
 class CompanyRegForm(FlaskForm):

@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app import db , role_required
 from database import models
 from sqlalchemy import or_
-from admin_mgmt import get_approved_company
+from routes.admin_mgmt import get_approved_company
 from forms import JobPostForm
 
 

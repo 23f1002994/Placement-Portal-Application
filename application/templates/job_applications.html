@@ -146,11 +146,16 @@
 
                                 <p><b>Contact:</b> {{ app.student.contact }}</p>
                                 <p><b>Education:</b> {{ app.student.education }}</p>
+                                <p><b>College:</b> {{ app.student.college }}</p>
+                                <p><b>Branch:</b> {{ app.student.branch }}</p>
+                                <p><b>Address:</b> {{ app.student.address }}</p>
+                                <p><b>Country:</b> {{ app.student.country }}</p>
                                 <p><b>Skills:</b> {{ app.student.skills }}</p>
 
                                 <hr>
                                 {% if app.student.resume %}
-                                    <a href="#"
+ 
+                                    <a href="{{ url_for('static', filename='uploads/resumes/' ~ app.student.resume) }}"
                                        class="btn btn-outline-primary w-100">
                                         Download Resume
                                     </a>

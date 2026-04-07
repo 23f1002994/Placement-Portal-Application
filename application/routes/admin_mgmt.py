@@ -33,6 +33,9 @@ def admin_dashboard():
 
         filters.append(models.Student.name.ilike(f'%{s}%'))
         filters.append(models.Student.contact.ilike(f'%{s}%'))
+        filters.append(models.Student.state.ilike(f'%{s}%'))
+        filters.append(models.Student.branch.ilike(f'%{s}%'))
+        filters.append(models.Student.education.ilike(f'%{s}%'))
         
         # if the search is a number then check the ID too
         if s.isdigit():

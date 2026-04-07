@@ -21,16 +21,44 @@
                     </div>
 
                     <div class="mb-3">
+                        {{form.dob.label(class="form-label fw-bold")}}
+                        {{form.dob(class="form-control", rows=3)}}
+                    </div>
+
+                    <div class="mb-3">
                         {{ form.education.label(class="form-label fw-bold")}}
                         {{form.education(class="form-control")}}
                     </div>
+
+                    <div class="mb-3">
+                        {{ form.college.label(class="form-label fw-bold")}}
+                        {{form.college(class="form-control")}}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.branch.label(class="form-label fw-bold")}}
+                        {{form.branch(class="form-control")}}
+                    </div>
+
+
 
                     <div class="mb-3">
                         {{form.skills.label(class="form-label fw-bold")}}
                         {{form.skills(class="form-control", rows=3)}}
                     </div>
 
-
+                    <div class="mb-3">
+                        {{ form.address.label(class="form-label fw-bold")}}
+                        {{form.address(class="form-control")}}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.country.label(class="form-label fw-bold")}}
+                        {{form.country(class="form-control")}}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.state.label(class="form-label fw-bold")}}
+                        {{form.state(class="form-control")}}
+                    </div>
 
                         <div class="mb-4">
                             {{form.resume.label(class="form-label fw-bold text-primary")}}

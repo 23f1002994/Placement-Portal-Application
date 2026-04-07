@@ -65,6 +65,7 @@
             <tr>
                 <th>Date</th>
                 <th>Student</th>
+                <th>Branch</th>
                 <th>Company</th>
                 <th>Drive</th>
                 <th>Status</th>
@@ -76,6 +77,7 @@
                 <tr>
                     <td><small>{{app.date.strftime('%Y-%m-%d')}}</small></td>
                     <td>{{ app.student.name }}</td>
+                    <td>{{ app.student.branch }}</td>
                     <td>{{app.placements.company.company_name}}</td>
                     <td>{{ app.placements.title }}</td>
 

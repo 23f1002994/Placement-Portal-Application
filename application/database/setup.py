@@ -1,6 +1,6 @@
 from app import app, db
 from database.models import User, Company, Student, Placements, Application
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta , date
 from werkzeug.security import generate_password_hash
 
 with app.app_context():
@@ -58,17 +58,29 @@ with app.app_context():
     student1 = Student(
         user_id=student_user1.id,
         name="Ricky",
-        contact="9999999999",
-        education="B.Tech CSE",
-        skills="Python, Flask, SQL", 
+        contact="9999999999", 
+        education="B.Tech EEE",
+        skills="Python, Flask, SQL, Control Systems", 
+        college="National Institute of Technology",
+        branch="Electrical and Electronics Engineering",
+        dob=date(2004, 5, 15),
+        address="Sector 2, Student Quarters",
+        state="Odisha",
+        country="India"
     )
 
     student2 = Student(
         user_id=student_user2.id,
         name="Aman",
         contact="8888888888",
-        education="B.Tech IT",
-        skills="Java, Spring Boot",
+        education="BS DSAI",
+        skills="Java, Spring Boot, Machine Learning",
+        college="National Institute of Technology",
+        branch="Data Science and Artificial Intelligence",
+        dob=date(2005, 8, 22),
+        address="Civil Township",
+        state="Odisha",
+        country="India"
     )
 
     db.session.add_all([student1, student2])

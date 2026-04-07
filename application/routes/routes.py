@@ -81,7 +81,18 @@ def reg_student():
         db.session.flush()
 
         # Create Student profile linked to the User for the Student db
-        newstudent = models.Student(user_id=newuser.id, name=form.name.data, contact = form.contact_number.data, education = form.education.data, skills = form.skills.data )
+        # newstudent = models.Student(user_id=newuser.id, name=form.name.data, contact = form.contact_number.data, education = form.education.data, skills = form.skills.data )
+        newstudent = models.Student(user_id=newuser.id, 
+                                    name=form.name.data, 
+                                    contact = form.contact_number.data, 
+                                    education = form.education.data, 
+                                    skills = form.skills.data,
+                                    college= form.college.data,
+                                    branch = form.branch.data,
+                                    dob = form.dob.data,
+                                    country = form.country.data,
+                                    state = form.state.data,
+                                    address = form.address.data)
         db.session.add(newstudent)
         db.session.commit()
 
@@ -120,12 +131,6 @@ def reg_company():
     return render_template('reg_company.html',form = form)
 
 
-import admin_mgmt
-import company_mgmt
-import student_mgmt
-
-
-
-
-
-
+from routes import admin_mgmt
+from routes import company_mgmt
+from routes import student_mgmt

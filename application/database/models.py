@@ -1,6 +1,7 @@
 from flask_login import UserMixin
-from datetime import datetime
+from datetime import datetime , date
 from app import db
+
 
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
@@ -14,6 +15,8 @@ class User(db.Model, UserMixin):
     # Relationships: Incase of deletion of the user-id all the instances of the user  -> company and student will be deleted
     student_profile = db.relationship('Student', backref='user', uselist=False, cascade="all, delete-orphan")
     company_profile = db.relationship('Company', backref='user', uselist=False, cascade="all, delete-orphan")
+
+
 
 class Company(db.Model):
     __tablename__ = 'company'
@@ -29,6 +32,8 @@ class Company(db.Model):
     # Relationships: Incase of deletion of the company all the placement_drives created by the company will be deleted.
     drives = db.relationship('Placements', backref='company', lazy=True, cascade="all, delete-orphan")
 
+
+
 class Student(db.Model):
     __tablename__ = 'student'
     
@@ -39,9 +44,18 @@ class Student(db.Model):
     education = db.Column(db.String(200))
     skills = db.Column(db.Text)
     resume = db.Column(db.String(255))
+    college = db.Column(db.String(200))
+    branch = db.Column(db.String(100))
+    dob = db.Column(db.Date)
+    country = db.Column(db.String(100))
+    state = db.Column(db.String(100))
+    address = db.Column(db.Text)
     
     # Relationships: Incase of deletion of the student all the job applications will be deleted.
     applications = db.relationship('Application', backref='student', lazy=True, cascade="all, delete-orphan")
+
+
+
 
 class Placements(db.Model):
     __tablename__ = 'placements'
@@ -62,6 +76,10 @@ class Placements(db.Model):
     
     # Relationships: if the placement drive is deleted all the job applications for that drive will also be deleted.
     applications = db.relationship('Application', backref='placements', lazy=True, cascade="all, delete-orphan")
+
+
+
+
 
 class Application(db.Model):
     __tablename__ = 'application'

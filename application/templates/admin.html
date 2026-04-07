@@ -204,7 +204,9 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Contact</th>
-                <th>Education</th>
+                <th>Specialization</th>
+                <th>Branch</th>
+                <th>State</th>
                 <th>Action</th>
             </tr>
 
@@ -214,6 +216,8 @@
                 <td>{{ student.name }}</td>
                 <td>{{ student.contact }}</td>
                 <td>{{ student.education }}</td>
+                <td>{{ student.branch}}</td>
+                <td>{{ student.state}}</td>
 
                 <td>
                     {% if student.user.status %}

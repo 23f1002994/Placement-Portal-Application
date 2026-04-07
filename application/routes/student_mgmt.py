@@ -44,7 +44,14 @@ def student_profile():
         student.contact= form.contact_number.data
         student.education= form.education.data
         student.skills= form.skills.data
-        
+        student.country = form.country.data
+        student.state=form.state.data 
+        student.address=form.address.data
+        student.branch = form.branch.data 
+        student.college=form.college.data
+        student.dob = form.dob.data
+
+
         if form.resume.data:
             filename= secure_filename(form.resume.data.filename)
             unique= f"user_{current_user.id}_{filename}"
@@ -61,6 +68,12 @@ def student_profile():
         form.contact_number.data =student.contact
         form.education.data =student.education
         form.skills.data =student.skills
+        form.country.data =student.country
+        form.state.data =student.state
+        form.address.data =student.address
+        form.branch.data =student.branch
+        form.college.data =student.college
+        form.dob.data = student.dob 
         
     return render_template('student_profile.html', form=form, student=student)
 
