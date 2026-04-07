@@ -12,9 +12,10 @@ class User(db.Model, UserMixin):
     role = db.Column(db.String(20), nullable=False) # can be 'admin', 'company', 'student'
     status = db.Column(db.Boolean, default=True) # for blacklisitng purposes
     
-    # Relationships: Incase of deletion of the user-id all the instances of the user  -> company and student will be deleted
+    # Relationships: Incase of deletion of the user-id all the instances of the user: company and student will be deleted
     student_profile = db.relationship('Student', backref='user', uselist=False, cascade="all, delete-orphan")
     company_profile = db.relationship('Company', backref='user', uselist=False, cascade="all, delete-orphan")
+
 
 
 
@@ -29,8 +30,9 @@ class Company(db.Model):
     HRcontact = db.Column(db.String(10),nullable = False)
     approval = db.Column(db.Boolean, default=False) # Approval of the Admin for the company
     
-    # Relationships: Incase of deletion of the company all the placement_drives created by the company will be deleted.
+    # Relationships: Incase of deletion of the company all the drives created by the company will be deleted.
     drives = db.relationship('Placements', backref='company', lazy=True, cascade="all, delete-orphan")
+
 
 
 
@@ -57,6 +59,7 @@ class Student(db.Model):
 
 
 
+
 class Placements(db.Model):
     __tablename__ = 'placements'
     
@@ -76,6 +79,7 @@ class Placements(db.Model):
     
     # Relationships: if the placement drive is deleted all the job applications for that drive will also be deleted.
     applications = db.relationship('Application', backref='placements', lazy=True, cascade="all, delete-orphan")
+
 
 
 

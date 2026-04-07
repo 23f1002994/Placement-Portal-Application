@@ -20,14 +20,14 @@ with app.app_context():
     )
 
     student_user1 = User(
-        username="student1",
+        username="Ricky",
         hashedpassword=generate_password_hash("123456"),
         role="student",
         status=True
     )
 
     student_user2 = User(
-        username="student2",
+        username="Aman",
         hashedpassword=generate_password_hash("123456"),
         role="student",
         status=True
@@ -57,9 +57,9 @@ with app.app_context():
 
     student1 = Student(
         user_id=student_user1.id,
-        name="Ricky",
+        name="Ayush Kumar Sahu",
         contact="9999999999", 
-        education="B.Tech EEE",
+        education="Bachelors of Technology",
         skills="Python, Flask, SQL, Control Systems", 
         college="National Institute of Technology",
         branch="Electrical and Electronics Engineering",
@@ -71,9 +71,9 @@ with app.app_context():
 
     student2 = Student(
         user_id=student_user2.id,
-        name="Aman",
+        name="Aman Prajapati",
         contact="8888888888",
-        education="BS DSAI",
+        education="Bachelors of Science",
         skills="Java, Spring Boot, Machine Learning",
         college="National Institute of Technology",
         branch="Data Science and Artificial Intelligence",
