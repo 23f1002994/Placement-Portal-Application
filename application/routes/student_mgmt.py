@@ -116,7 +116,6 @@ def job_board():
 
 
 
-
 # Apply for jobs
 @app.route('/student/apply/<int:job_id>', methods=['POST'])
 @login_required
