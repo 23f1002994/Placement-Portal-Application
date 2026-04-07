@@ -73,7 +73,6 @@
                 <tr>
 
                     <td><b>{{job.title}}</b></td>
-
                     <td>{{job.deadline.strftime('%Y-%m-%d')}}</td>
 
                     <td>
@@ -138,7 +137,7 @@
 
                     </td>
 
-                    <td>
+                <td>
                         {% if job.admin_approval %}
                             <span class="badge bg-success">Approved</span>
                         {% elif job.is_rejected %}
