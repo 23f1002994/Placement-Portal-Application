@@ -9,6 +9,7 @@ from routes.admin_mgmt import get_approved_company
 from forms import JobPostForm
 
 
+
 # Company Dashboard
 @app.route('/company')
 @login_required
