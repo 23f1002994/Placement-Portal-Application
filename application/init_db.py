@@ -4,7 +4,9 @@ from werkzeug.security import generate_password_hash
 
 def initdb():
     with app.app_context():
+        db.drop_all() # resetting the db
         db.create_all() 
+    
 
         # Check if admin is seeded or not
         admin = User.query.filter_by(username='admin').first() 
