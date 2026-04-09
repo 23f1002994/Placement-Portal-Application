@@ -113,7 +113,7 @@ def view_job_applications(job_id):
 @app.route('/company/application/<int:app_id>/status/<string:new_status>')
 @login_required
 @role_required('company')
-def update_application_status(app_id, nstatus):
+def update_application_status(app_id, new_status):
     company= get_approved_company() 
     application = models.Application.query.get_or_404(app_id)
     
@@ -123,10 +123,10 @@ def update_application_status(app_id, nstatus):
         return redirect(url_for('company_dashboard'))
 
     statuses = ['Applied', 'Shortlisted', 'interview', 'Selected', 'Rejected'] 
-    if nstatus in statuses:
-        application.status = nstatus # Update to new staus
+    if new_status in statuses:
+        application.status = new_status # Update to new staus
         db.session.commit()
-        flash(f'Application status updated to {nstatus}.', 'success')
+        flash(f'Application status updated to {new_status}.', 'success')
     
     return redirect(url_for('view_job_applications', job_id = application.job_id))
 
