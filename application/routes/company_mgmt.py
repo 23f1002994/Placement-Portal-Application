@@ -53,6 +53,7 @@ def post_job():
             experience =form.experience_required.data ,
             salary= form.salary_range.data ,
             deadline= form.deadline.data,
+            website = form.website_url.data,
             status= True,
             admin_approval= False ,
             is_rejected= False 
